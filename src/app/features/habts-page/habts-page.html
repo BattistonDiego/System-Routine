@@ -1,0 +1,32 @@
+<div class="conteudo">
+    <div class="my-progress">
+        <div class="cabecalho">
+            <img src="assets/icon-title.svg" alt="teste">
+            <h2>Meu progresso</h2>
+        </div>
+        <p>Acompanhe seus hábitos diários e alcance suas metas</p>
+    </div>
+
+    <div class="date-container">
+        <button mat-icon-button (click)="changeDate(-1)">
+            <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <div class="date-display">
+            <div class="date-info">
+                <mat-icon>calendar_month</mat-icon>
+                <span>{{ selectedDate | date: 'dd \'de\' MMMM \'de\' yyyy' }}</span>
+            </div>
+            <a class="today" (click)="goToToday()">Hoje</a>
+
+            <div class="history">
+                <mat-icon>access_time</mat-icon>
+                <span>Ver Histórico</span>
+            </div>
+        </div>
+
+        <button mat-icon-button (click)="changeDate(1)">
+            <mat-icon>chevron_right</mat-icon>
+        </button>
+    </div>
+</div>
