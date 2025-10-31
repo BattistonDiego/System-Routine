@@ -29,4 +29,9 @@
             <mat-icon>chevron_right</mat-icon>
         </button>
     </div>
+
+    <div class="cards">
+        <app-card *ngFor="let card of listCards" [description]="card.description" [complement]="card.complement"
+            [icon]="card.icon"></app-card>
+    </div>
 </div>
