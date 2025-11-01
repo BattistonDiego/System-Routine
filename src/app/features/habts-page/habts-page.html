@@ -34,4 +34,13 @@
         <app-card *ngFor="let card of listCards" [description]="card.description" [complement]="card.complement"
             [icon]="card.icon"></app-card>
     </div>
+
+    <div class="habts">
+        <h3>Hábitos de Hoje</h3>
+        <div class="cards-horizontal">
+            <app-card-horizont *ngFor="let cardHorizontal of listCardsHorizontal" [name]="cardHorizontal.name"
+                [goal]="cardHorizontal.goal" [current]="cardHorizontal.current" [icon]="cardHorizontal.icon"
+                [description]="cardHorizontal.description"></app-card-horizont>
+        </div>
+    </div>
 </div>
