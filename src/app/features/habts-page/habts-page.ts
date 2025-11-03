@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { Card } from '../../components/card/card';
 import { CardHorizont } from '../../components/card-horizont/card-horizont';
 import { History } from '../../components/history/history';
+import { MatDialog } from '@angular/material/dialog';
+import { AddHabitModal } from '../../components/add-habit-modal/add-habit-modal';
 
 @Component({
   selector: 'app-habts-page',
@@ -18,6 +20,8 @@ export class HabtsPage {
   progress = 0;
   restante = 100;
   showHistoryFlag = false;
+
+  constructor(private dialog: MatDialog) {}
 
   listCards = [
     {
@@ -87,5 +91,15 @@ export class HabtsPage {
 
     const habitsCard = this.listCards.find((c) => c.description === 'Hábitos Completos');
     if (habitsCard) habitsCard.complement = `${completed}/${this.listTotalHabitos.length}`;
+
+    this.restante = 100 - progress;
+  }
+
+  openAddHabitModal() {
+    this.dialog.open(AddHabitModal, {
+      data: {
+        // You can pass data to the modal here if needed
+      },
+    });
   }
 }

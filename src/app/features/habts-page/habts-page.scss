@@ -27,6 +27,16 @@
     }
   }
 
+  .add {
+    width: 120px;
+    border-radius: 8px;
+    background-color: #3b82f6;
+    border: none;
+    color: white;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
   .date-container {
     background-color: #374151;
     display: flex;

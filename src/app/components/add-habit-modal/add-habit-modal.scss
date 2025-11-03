@@ -1,0 +1,91 @@
+.container-modal {
+  height: 618px;
+  width: 448px;
+  border-radius: 12px;
+  background-color: #1f2937;
+
+  padding: 24px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h2 {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  button mat-icon {
+    color: #bbb;
+  }
+}
+
+.label {
+  font-size: 14px;
+  margin-bottom: -6px;
+  color: #cfcfcf;
+}
+
+.icon-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  button {
+    width: 60px;
+    height: 52px;
+    border-radius: 10px;
+    background: #2b2d3a;
+    border: 2px solid transparent;
+    color: #cfcfcf;
+
+    &.selected {
+      border-color: #4a90e2;
+      background: #2e3b55;
+      color: #fff;
+    }
+  }
+}
+
+.row {
+  display: flex;
+  gap: 14px;
+}
+
+.color-list {
+  display: flex;
+  gap: 10px;
+
+  .color {
+    width: 59px;
+    height: 34px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+
+    &.selected {
+      border-color: #fff;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  .cancel {
+    color: #bbb;
+  }
+
+  .add {
+    background: #4a90e2;
+    font-weight: 600;
+  }
+}

@@ -38,7 +38,11 @@
     </div>
 
     <div class="habts">
-        <h3>Hábitos de Hoje</h3>
+        <div style="display: flex; justify-content: space-between;margin-bottom: 20px;">
+            <h3>Hábitos de Hoje</h3>
+            <button class="add" (click)="openAddHabitModal()">Adicionar Hábito</button>
+        </div>
+
         <div class="cards-horizontal">
             <app-card-horizont *ngFor="let habito of listTotalHabitos; let i = index" [name]="habito.name"
                 [goal]="habito.goal" [current]="habito.current" [icon]="habito.icon" [description]="habito.description"
