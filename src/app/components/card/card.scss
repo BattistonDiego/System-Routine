@@ -1,7 +1,7 @@
 .container-card {
   width: 272px;
   height: 107px;
-  background-color: white;
+  background-color: #374151;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-top: 24px;
   border-radius: 12px;
@@ -18,12 +18,13 @@
 
     span:first-child {
       font-size: 11px;
-      color: #6b7280;
+      color: #9ca3af;
     }
 
     .complement {
       font-size: 22px;
       font-weight: bold;
+      color: white;
     }
   }
 

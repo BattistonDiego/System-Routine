@@ -38,9 +38,14 @@
     <div class="habts">
         <h3>Hábitos de Hoje</h3>
         <div class="cards-horizontal">
-            <app-card-horizont *ngFor="let cardHorizontal of listCardsHorizontal" [name]="cardHorizontal.name"
-                [goal]="cardHorizontal.goal" [current]="cardHorizontal.current" [icon]="cardHorizontal.icon"
-                [description]="cardHorizontal.description"></app-card-horizont>
+            <app-card-horizont *ngFor="let habito of listTotalHabitos" [name]="habito.name" [goal]="habito.goal"
+                [current]="habito.current" [icon]="habito.icon" [description]="habito.description"
+                (completed)="onHabitCompleted()" (incompleted)="onCardInCompleted()"></app-card-horizont>
         </div>
     </div>
+
+    <footer>
+        <h3>Continue assim! 💪</h3>
+        <span>Você está a {{ restante}}% de completar todas as suas metas de hoje.</span>
+    </footer>
 </div>

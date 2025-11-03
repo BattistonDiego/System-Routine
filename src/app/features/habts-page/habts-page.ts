@@ -13,9 +13,16 @@ import { CardHorizont } from '../../components/card-horizont/card-horizont';
 })
 export class HabtsPage {
   selectedDate = new Date();
+  completedHabitsCount = 0;
+  progress = 0;
+  restante = 100;
 
   listCards = [
-    { description: 'Progresso', complement: '70%', icon: 'assets/png/icon-progress.png' },
+    {
+      description: 'Progresso',
+      complement: this.progress + '%',
+      icon: 'assets/png/icon-progress.png',
+    },
     {
       description: 'Hábitos Completos',
       complement: '0/3',
@@ -24,7 +31,7 @@ export class HabtsPage {
     { description: 'Sequência', complement: '3 Dias', icon: 'assets/png/icon-sequence.png' },
   ];
 
-  listCardsHorizontal = [
+  listTotalHabitos = [
     {
       name: 'Beber água',
       goal: 3,
@@ -56,5 +63,33 @@ export class HabtsPage {
 
   goToToday() {
     this.selectedDate = new Date();
+  }
+
+  onHabitCompleted() {
+    if (this.completedHabitsCount < 3) {
+      this.completedHabitsCount++;
+
+      this.updateCards();
+    }
+  }
+
+  onCardInCompleted() {
+    if (this.completedHabitsCount > 0) {
+      this.completedHabitsCount--;
+      this.updateCards();
+    }
+  }
+
+  private updateCards() {
+    const habitsCard = this.listCards.find((c) => c.description === 'Hábitos Completos');
+    if (habitsCard) habitsCard.complement = this.completedHabitsCount + '/ 3';
+
+    const progressCard = this.listCards.find((c) => c.description === 'Progresso');
+    if (progressCard) {
+      const progress = Math.round((this.completedHabitsCount / 3) * 100);
+      progressCard.complement = progress + '%';
+    }
+
+    this.restante = 100 - Math.round((this.completedHabitsCount / 3) * 100);
   }
 }

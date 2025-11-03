@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,4 +11,5 @@ export class Card {
   @Input() description!: string;
   @Input() complement!: string;
   @Input() icon!: string;
+  @Input() habtsCompleted = 0;
 }
