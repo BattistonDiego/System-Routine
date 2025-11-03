@@ -4,10 +4,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { Card } from '../../components/card/card';
 import { CardHorizont } from '../../components/card-horizont/card-horizont';
+import { History } from '../../components/history/history';
 
 @Component({
   selector: 'app-habts-page',
-  imports: [MatIconModule, MatButtonModule, CommonModule, Card, CardHorizont],
+  imports: [MatIconModule, MatButtonModule, CommonModule, Card, CardHorizont, History],
   templateUrl: './habts-page.html',
   styleUrl: './habts-page.scss',
 })
@@ -16,6 +17,7 @@ export class HabtsPage {
   completedHabitsCount = 0;
   progress = 0;
   restante = 100;
+  showHistoryFlag = false;
 
   listCards = [
     {
@@ -65,31 +67,25 @@ export class HabtsPage {
     this.selectedDate = new Date();
   }
 
-  onHabitCompleted() {
-    if (this.completedHabitsCount < 3) {
-      this.completedHabitsCount++;
-
-      this.updateCards();
-    }
+  showHistory() {
+    this.showHistoryFlag = !this.showHistoryFlag;
   }
 
-  onCardInCompleted() {
-    if (this.completedHabitsCount > 0) {
-      this.completedHabitsCount--;
-      this.updateCards();
-    }
+  onHabitChanged(event: { index: number; current: number }) {
+    this.listTotalHabitos[event.index].current = event.current;
+    this.recalculateProgress();
   }
 
-  private updateCards() {
-    const habitsCard = this.listCards.find((c) => c.description === 'Hábitos Completos');
-    if (habitsCard) habitsCard.complement = this.completedHabitsCount + '/ 3';
+  recalculateProgress() {
+    const completed = this.listTotalHabitos.filter((h) => h.current >= h.goal).length;
+    this.completedHabitsCount = completed;
+
+    const progress = Math.round((completed / this.listTotalHabitos.length) * 100);
 
     const progressCard = this.listCards.find((c) => c.description === 'Progresso');
-    if (progressCard) {
-      const progress = Math.round((this.completedHabitsCount / 3) * 100);
-      progressCard.complement = progress + '%';
-    }
+    if (progressCard) progressCard.complement = `${progress}%`;
 
-    this.restante = 100 - Math.round((this.completedHabitsCount / 3) * 100);
+    const habitsCard = this.listCards.find((c) => c.description === 'Hábitos Completos');
+    if (habitsCard) habitsCard.complement = `${completed}/${this.listTotalHabitos.length}`;
   }
 }

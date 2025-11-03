@@ -19,7 +19,7 @@
             </div>
             <a class="today" (click)="goToToday()">Hoje</a>
 
-            <div class="history">
+            <div class="history" (click)="showHistory()">
                 <mat-icon>access_time</mat-icon>
                 <span>Ver Histórico</span>
             </div>
@@ -30,6 +30,8 @@
         </button>
     </div>
 
+    <app-history *ngIf="showHistoryFlag"></app-history>
+
     <div class="cards">
         <app-card *ngFor="let card of listCards" [description]="card.description" [complement]="card.complement"
             [icon]="card.icon"></app-card>
@@ -38,9 +40,9 @@
     <div class="habts">
         <h3>Hábitos de Hoje</h3>
         <div class="cards-horizontal">
-            <app-card-horizont *ngFor="let habito of listTotalHabitos" [name]="habito.name" [goal]="habito.goal"
-                [current]="habito.current" [icon]="habito.icon" [description]="habito.description"
-                (completed)="onHabitCompleted()" (incompleted)="onCardInCompleted()"></app-card-horizont>
+            <app-card-horizont *ngFor="let habito of listTotalHabitos; let i = index" [name]="habito.name"
+                [goal]="habito.goal" [current]="habito.current" [icon]="habito.icon" [description]="habito.description"
+                [index]="i" (habitChanged)="onHabitChanged($event)"></app-card-horizont>
         </div>
     </div>
 

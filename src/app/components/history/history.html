@@ -1,0 +1,19 @@
+<div class="container-history">
+    <h3>Histórico dos Últimos Dias</h3>
+
+    <div class="day" *ngFor="let day of listHistory">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <img src="assets/png/icon-calendar.png" alt="">
+            <div class="date">
+                <span>{{day.date}}</span>
+                <span>{{day.completed}}</span>
+            </div>
+        </div>
+
+
+        <div class="porcentagem">
+            <span>100%</span>
+            <img src="assets/png/icon-success-history.png" alt="">
+        </div>
+    </div>
+</div>

@@ -17,25 +17,21 @@ export class CardHorizont {
   @Input() current!: number;
   @Input() icon!: string;
   @Input() description: string = '';
+  @Input() index!: number;
 
-  @Output() completed = new EventEmitter<any>();
-  @Output() incompleted = new EventEmitter<any>();
+  @Output() habitChanged = new EventEmitter<{ index: number; current: number }>();
 
-  increase(): void {
+  increase() {
     if (this.current < this.goal) {
       this.current++;
-      if (this.current === this.goal) {
-        this.completed.emit();
-      }
+      this.habitChanged.emit({ index: this.index, current: this.current });
     }
   }
 
-  decrease(): void {
+  decrease() {
     if (this.current > 0) {
       this.current--;
-      if (this.current !== this.goal) {
-        this.incompleted.emit();
-      }
+      this.habitChanged.emit({ index: this.index, current: this.current });
     }
   }
 
