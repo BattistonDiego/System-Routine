@@ -6,36 +6,39 @@
         </button>
     </div>
 
-    <mat-form-field appearance="fill" class="full">
-        <mat-label>Nome do Hábito</mat-label>
-        <input matInput placeholder="Ex: Beber Água">
-    </mat-form-field>
-
-    <label class="label">Ícone</label>
-    <div class="icon-list">
-        <button *ngFor="let ic of icons" mat-icon-button [class.selected]="selectedIcon === ic.name"
-            (click)="selectedIcon = ic.name">
-            <mat-icon>{{ ic.name }}</mat-icon>
-        </button>
-    </div>
-
-    <div class="row">
-        <mat-form-field appearance="fill">
-            <mat-label>Meta</mat-label>
-            <input matInput type="number" placeholder="1">
+    <form [formGroup]="habitoForm">
+        <mat-form-field appearance="fill" class="full">
+            <mat-label>Nome do Hábito</mat-label>
+            <input matInput placeholder="Ex: Beber Água" formControlName="nome">
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Unidade</mat-label>
-            <input matInput placeholder="Ex: copos">
-        </mat-form-field>
-    </div>
+        <label class="label">Ícone</label>
+        <div class="icon-list">
+            <button *ngFor="let ic of icons" mat-icon-button [class.selected]="selectedIcon === ic.name"
+                (click)="selectedIcon = ic.src">
+                <mat-icon>{{ ic.name }}</mat-icon>
+            </button>
+        </div>
 
-    <label class="label">Cor</label>
-    <div class="color-list">
-        <div *ngFor="let c of colors" class="color" [style.background]="c" [class.selected]="selectedColor === c"
-            (click)="selectedColor = c"></div>
-    </div>
+        <div class="row">
+            <mat-form-field appearance="fill">
+                <mat-label>Meta</mat-label>
+                <input matInput type="number" placeholder="1" formControlName="meta">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Unidade</mat-label>
+                <input matInput placeholder="Ex: copos" formControlName="unidade">
+            </mat-form-field>
+        </div>
+
+        <label class="label">Cor</label>
+        <div class="color-list">
+            <div *ngFor="let c of colors" class="color" [style.background]="c" [class.selected]="selectedColor === c"
+                (click)="selectedColor = c"></div>
+        </div>
+    </form>
+
 
     <div class="actions">
         <button mat-button class="cancel" (click)="close()">Cancelar</button>

@@ -26,10 +26,15 @@
   }
 }
 
+.full {
+  width: 100%;
+}
+
 .label {
   font-size: 14px;
   margin-bottom: -6px;
   color: #cfcfcf;
+  display: table-cell;
 }
 
 .icon-list {
@@ -79,6 +84,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  margin-top: 90px;
 
   .cancel {
     color: #bbb;

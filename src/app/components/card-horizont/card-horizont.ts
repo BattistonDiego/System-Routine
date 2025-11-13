@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { Habito } from '../../interface/habito.model';
 
 @Component({
   selector: 'app-card-horizont',
@@ -13,11 +14,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 })
 export class CardHorizont {
   @Input() name: string = '';
-  @Input() goal!: number;
-  @Input() current!: number;
+  goal: number = 3;
+  current: number = 0;
   @Input() icon!: string;
   @Input() description: string = '';
+
   @Input() index!: number;
+  @Input() habito!: Habito;
 
   @Output() habitChanged = new EventEmitter<{ index: number; current: number }>();
 

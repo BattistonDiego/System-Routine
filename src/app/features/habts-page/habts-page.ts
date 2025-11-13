@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,8 @@ import { CardHorizont } from '../../components/card-horizont/card-horizont';
 import { History } from '../../components/history/history';
 import { MatDialog } from '@angular/material/dialog';
 import { AddHabitModal } from '../../components/add-habit-modal/add-habit-modal';
+import { HabitoService } from '../../service/habito.service';
+import { CreateHabito, Habito } from '../../interface/habito.model';
 
 @Component({
   selector: 'app-habts-page',
@@ -14,14 +16,14 @@ import { AddHabitModal } from '../../components/add-habit-modal/add-habit-modal'
   templateUrl: './habts-page.html',
   styleUrl: './habts-page.scss',
 })
-export class HabtsPage {
+export class HabtsPage implements OnInit {
   selectedDate = new Date();
   completedHabitsCount = 0;
   progress = 0;
   restante = 100;
   showHistoryFlag = false;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private habitoService: HabitoService) {}
 
   listCards = [
     {
@@ -37,29 +39,22 @@ export class HabtsPage {
     { description: 'Sequência', complement: '3 Dias', icon: 'assets/png/icon-sequence.png' },
   ];
 
-  listTotalHabitos = [
-    {
-      name: 'Beber água',
-      goal: 3,
-      current: 0,
-      icon: 'assets/png/icon-water.png',
-      description: 'Litros',
-    },
-    {
-      name: 'Estudar',
-      goal: 30,
-      current: 0,
-      icon: 'assets/png/icon-study.png',
-      description: 'Minutos',
-    },
-    {
-      name: 'Exercícios',
-      goal: 1,
-      current: 0,
-      icon: 'assets/png/icon-workout.png',
-      description: 'Sessão',
-    },
-  ];
+  listHabitos: Habito[] = [];
+
+  ngOnInit() {
+    this.loadHabitos();
+  }
+
+  loadHabitos() {
+    this.habitoService.getHabitos().subscribe((habitos) => {
+      this.listHabitos = habitos.map((h) => ({
+        ...h,
+        current: 0,
+      }));
+
+      console.log(this.listHabitos);
+    });
+  }
 
   changeDate(days: number) {
     const newDate = new Date(this.selectedDate);
@@ -76,29 +71,52 @@ export class HabtsPage {
   }
 
   onHabitChanged(event: { index: number; current: number }) {
-    this.listTotalHabitos[event.index].current = event.current;
+    console.log(event.index, event.current);
+    this.listHabitos[event.index].current = event.current;
     this.recalculateProgress();
   }
 
   recalculateProgress() {
-    const completed = this.listTotalHabitos.filter((h) => h.current >= h.goal).length;
+    const completed = this.listHabitos.filter((h) => h.current! >= h.meta).length;
     this.completedHabitsCount = completed;
 
-    const progress = Math.round((completed / this.listTotalHabitos.length) * 100);
+    const progress = Math.round((completed / this.listHabitos.length) * 100);
 
     const progressCard = this.listCards.find((c) => c.description === 'Progresso');
     if (progressCard) progressCard.complement = `${progress}%`;
 
     const habitsCard = this.listCards.find((c) => c.description === 'Hábitos Completos');
-    if (habitsCard) habitsCard.complement = `${completed}/${this.listTotalHabitos.length}`;
+    if (habitsCard) habitsCard.complement = `${completed}/${this.listHabitos.length}`;
 
     this.restante = 100 - progress;
   }
 
   openAddHabitModal() {
-    this.dialog.open(AddHabitModal, {
+    const dialogRef = this.dialog.open(AddHabitModal, {
       data: {
         // You can pass data to the modal here if needed
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const newHabit: Habito = {
+          nome: result.habit.nome,
+          meta: result.habit.meta,
+          unidade: result.habit.unidade,
+          icone: result.icon,
+          cor: result.color,
+        };
+        this.addHabit(newHabit);
+        console.log(newHabit);
+      }
+    });
+  }
+
+  addHabit(habit: Habito) {
+    this.habitoService.postHabitos(habit).subscribe({
+      next: (response) => {
+        console.log('Habit added successfully:', response);
       },
     });
   }

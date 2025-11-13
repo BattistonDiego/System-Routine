@@ -44,9 +44,8 @@
         </div>
 
         <div class="cards-horizontal">
-            <app-card-horizont *ngFor="let habito of listTotalHabitos; let i = index" [name]="habito.name"
-                [goal]="habito.goal" [current]="habito.current" [icon]="habito.icon" [description]="habito.description"
-                [index]="i" (habitChanged)="onHabitChanged($event)"></app-card-horizont>
+            <app-card-horizont *ngFor="let habito of listHabitos; let i = index" [index]="i"
+                (habitChanged)="onHabitChanged($event)" [habito]="habito"></app-card-horizont>
         </div>
     </div>
 
