@@ -230,7 +230,6 @@ export class DashboardPage implements OnInit {
         this.atividades = res;
         this.dias = this.gerarDias();
         this.semanas = this.gerarSemanas();
-        console.log(this.semanas);
       },
     });
   }
@@ -244,7 +243,7 @@ export class DashboardPage implements OnInit {
     const current = new Date(inicio);
 
     while (current <= hoje) {
-      const dataFormatada = current.toISOString().split('T')[0]; // ex: "2026-01-09"
+      const dataFormatada = current.toISOString().split('T')[0];
 
       const encontrado = this.atividades.find((a) => a.data === dataFormatada);
 

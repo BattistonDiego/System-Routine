@@ -16,6 +16,7 @@ import { HistoricoService } from '../../service/historico.service';
 import { UsuarioService } from '../../service/usuario.service';
 import { User } from '../../interface/user.model';
 import { UserStateService } from '../../service/user-state.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-habts-page',
@@ -57,57 +58,86 @@ export class HabtsPage implements OnInit {
   listHistorico: any[] = [];
 
   ngOnInit() {
-    this.getUserLogged();
+    this.carregarDadosIniciais();
   }
 
-  getUserLogged() {
-    this.usuarioService.getUserLogged().subscribe({
-      next: (res) => {
-        this.usuario = res;
-        this.usuarioId = res.id;
-        localStorage.setItem('perfil', res.perfil);
-        localStorage.setItem('usuario', JSON.stringify(res));
-        this.userStateService.setUsuario(res);
-        this.loadHabitos();
-      },
-    });
+  carregarDadosIniciais() {
+    this.usuarioService
+      .getUserLogged()
+      .pipe(
+        switchMap((res) => {
+          this.usuario = res;
+          this.usuarioId = res.id;
+          localStorage.setItem('perfil', res.perfil);
+          localStorage.setItem('usuario', JSON.stringify(res));
+          this.userStateService.setUsuario(res);
+          return this.habitoService.getHabitos();
+        }),
+        switchMap((habitos) => {
+          this.listHabitos = habitos.map((h) => ({
+            ...h,
+            current: 0,
+          }));
+
+          this.totalHabitos = habitos.length;
+
+          this.updatesCards();
+          const hoje = new Date().toISOString().split('T')[0];
+          return this.historicoService.getListHistoricoByDate(hoje);
+        }),
+      )
+      .subscribe((historico) => {
+        this.listHistorico = historico;
+
+        const habitosComRegistro = this.listHabitos.filter((h) =>
+          this.listHistorico.some((r) => r.habito.id === h.id),
+        );
+
+        if (habitosComRegistro.length > 0) {
+          this.getHabitosCompletadoHoje();
+        }
+
+        this.recalculateProgress();
+
+        if (this.listHabitos.length > 0) {
+          this.getConsecutivesDay(this.listHabitos[0].id);
+        }
+      });
   }
 
-  loadHabitos() {
-    this.habitoService.getHabitos().subscribe((habitos) => {
-      this.listHabitos = habitos.map((h) => ({
-        ...h,
-        current: 0,
-      }));
+  recarregarDados() {
+    this.habitoService
+      .getHabitos()
+      .pipe(
+        switchMap((habitos) => {
+          this.listHabitos = habitos.map((h) => ({
+            ...h,
+            current: 0,
+          }));
 
-      this.totalHabitos = habitos.length;
+          this.totalHabitos = habitos.length;
+          this.updatesCards();
+          const hoje = new Date().toISOString().split('T')[0];
+          return this.historicoService.getListHistoricoByDate(hoje);
+        }),
+      )
+      .subscribe((res) => {
+        this.listHistorico = res;
 
-      this.loadHistrorico();
+        const habitosComRegistro = this.listHabitos.filter((h) =>
+          this.listHistorico.some((r) => r.habito.id === h.id),
+        );
 
-      this.updatesCards();
-    });
-  }
+        if (habitosComRegistro.length > 0) {
+          this.getHabitosCompletadoHoje();
+        }
 
-  loadHistrorico() {
-    const hoje = new Date().toISOString().split('T')[0];
+        this.recalculateProgress();
 
-    this.historicoService.getListHistoricoByDate(hoje).subscribe((res) => {
-      this.listHistorico = res;
-
-      const habitosComRegistro = this.listHabitos.filter((h) =>
-        this.listHistorico.some((r) => r.habito.id === h.id),
-      );
-
-      if (habitosComRegistro.length > 0) {
-        this.getHabitosCompletadoHoje();
-      }
-
-      this.recalculateProgress();
-
-      if (this.listHabitos.length > 0) {
-        this.getConsecutivesDay(this.listHabitos[0].id);
-      }
-    });
+        if (this.listHabitos.length > 0) {
+          this.getConsecutivesDay(this.listHabitos[0].id);
+        }
+      });
   }
 
   updatesCards() {
@@ -144,7 +174,7 @@ export class HabtsPage implements OnInit {
           panelClass: ['snackbar-success'],
         });
 
-        this.loadHabitos();
+        this.recarregarDados();
       },
       error: () => {
         this.snackBar.openFromComponent(CustomSnackbar, {
@@ -180,7 +210,7 @@ export class HabtsPage implements OnInit {
               verticalPosition: 'top',
               panelClass: ['snackbar-error'],
             });
-            this.loadHabitos();
+            this.recarregarDados();
           },
         });
       }
@@ -259,7 +289,7 @@ export class HabtsPage implements OnInit {
 
     const habito = this.listHabitos[event.index];
 
-    if (this.listHabitos[event.index].current === this.listHabitos[event.index].meta) {
+    if (habito.current === habito.meta) {
       this.habitCompleted(habito);
     }
   }

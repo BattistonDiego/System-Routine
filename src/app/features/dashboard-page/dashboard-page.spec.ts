@@ -4,6 +4,7 @@ import { DashboardPage } from './dashboard-page';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 describe('DashboardPage', () => {
   let component: DashboardPage;
@@ -12,7 +13,12 @@ describe('DashboardPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DashboardPage],
-      providers: [provideRouter([]), provideHttpClient(withFetch()), provideHttpClientTesting()],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(withFetch()),
+        provideHttpClientTesting(),
+        provideCharts(withDefaultRegisterables()), // <-- adicionar isso
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DashboardPage);

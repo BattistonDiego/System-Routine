@@ -41,6 +41,7 @@ describe('Header', () => {
 
   it('deve setar o usuario quando getUsuario emitir', () => {
     const usuario: User = {
+      id: 1,
       nome: 'Diego Battiston',
       email: 'diego@email.com',
       telefone: '11999999999',

@@ -78,4 +78,18 @@ describe('HabtsPage', () => {
     // Assert
     expect(component.listHabitos.length).toBe(1);
   });
+
+  it('deve retornar lista vazia', () => {
+    // Arrange
+    const usuario = { id: 1, nome: 'Diego', perfil: 'ADMINISTRADOR' };
+    usuarioService.getUserLogged.and.returnValue(of(usuario));
+    habitService.getHabitos.and.returnValue(of([]));
+    historicoService.getListHistoricoByDate.and.returnValue(of([]));
+
+    // Act
+    fixture.detectChanges(); // dispara o ngOnInit
+
+    // Assert
+    expect(component.listHabitos).toEqual([]);
+  });
 });

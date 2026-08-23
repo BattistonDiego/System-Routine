@@ -67,7 +67,6 @@ export class CardHorizont {
     if (this.showStats) {
       this.historicoService.getEstatisticas(this.habito.id).subscribe({
         next: (data) => {
-          console.log(data);
           this.estatisticaHistorico = data;
         },
         error: () => {},
